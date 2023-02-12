@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" type="text/css" href="style.css" media="screen" />
+
+	<title>Regalos navideños</title>
+</head>
+
+<body>
+	<div class="wrapper">
+		<h1>Árbol navideño</h1>
+		<div class="select-wrap" id="peopleWrap">
+			<select id="people"></select>
+			<span class="arrow"></span>
+		</div>
+		<div><button id="choose">¿Quién eres?</button></div>
+		<div id="result"></div>
+		<div class="close"><span id="close"></span></div>
+	</div>
+</body>
+
+<script>
+
+	var give = ['Marina', 'Adolfo', 'Illari', 'Diana'];
+	var receive = give.concat();
+	var peopleWrap = document.getElementById('peopleWrap');
+	var people = document.getElementById('people');
+	var choose = document.getElementById('choose');
+	var result = document.getElementById('result');
+	var close = document.getElementById('close');
+
+	window.onload = function () {
+		drawList();
+	};
+
+
+
+	function drawList() {
+		people.innerHTML = '<option value="">¿Quién eres?</option>';
+		for (var i = give.length - 1; i >= 0; i--) {
+			var option = document.createElement('option');
+			option.value = i;
+			option.innerHTML = give[i];
+			people.appendChild(option);
+		}
+	}
+
+	function selectPerson(person) {
+		var name = give[person];
+		var nameIndex = receive.indexOf(name);
+
+		if (nameIndex >= 0) {
+			receive.splice(nameIndex, 1);
+		}
+		var recipient = Math.floor((Math.random() * receive.length));
+		var recipientName = receive[recipient];
+
+		give.splice(person, 1);
+
+		switch (name) {
+			case 'Diana':
+				result.innerHTML = "<h2>" + name + ",  tu regalo es: <br><br> Ticket de ingreso para cualquier concierto 2023!</h2>";
+				break;
+			case 'Illari':
+				result.innerHTML = "<h2>" + name + ",  tu regalo es: <br><br> Curso de piano!</h2>";
+				break;
+			case 'Marina':
+			case 'Adolfo':
+				result.innerHTML = "<h2>" + name + ",  tu regalo es: <br><br> Hotel y vuelos pagos a San Andres en Enero 2023!</h2>";
+				break;
+			default:
+				console.log(`Sorry no se quien es ${name}.`);
+		}
+
+		close.innerHTML = "Siguiente persona.";
+		if (give.length > 0) {
+			drawList();
+		}
+	}
+
+	choose.onclick = function () {
+		if (people.value) {
+			selectPerson(people.value);
+		}
+	};
+
+	close.onclick = function () {
+		result.innerHTML = "";
+		close.innerHTML = "";
+		if (give.length == 0) {
+			peopleWrap.parentNode.removeChild(peopleWrap);
+			choose.parentNode.removeChild(choose);
+			result.innerHTML = "<h2>Todos recibieron su regalo!</h2>";
+			close.innerHTML = "";
+		}
+	};
+
+</script>
+
+</html>
